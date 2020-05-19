@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoan.dao.RoleDao">
+    <resultMap id="roleMap" type="role">
+        <id property="roleId" column="rid"></id>
+        <result property="roleName" column="role_name"></result>
+        <result property="roleDesc" column="role_desc"></result>
+        <!--
+            property="Role中定义的user集合名字，此处为users"
+            ofType="user实体类中的字段名，因为配置了别名，不区分大小写所以是user"
+            -->
+        <collection property="users" ofType="user">
+            <id property="id" column="id"></id>
+            <result property="username" column="username"></result>
+            <result property="birthday" column="birthday"></result>
+            <result property="sex" column="sex"></result>
+            <result property="address" column="address"></result>
+        </collection>
+    </resultMap>
+
+    <!--查询所有-->
+    <select id="seletFindAll" resultMap="roleMap">
+        SELECT u.*,r.id as rid,r.role_desc,r.role_name FROM role r
+            LEFT JOIN role_user ru ON r.id = ru.rid
+            LEFT JOIN `user` u ON u.id = ru.uid
+    </select>
+
+    <!--根据用户id查询用户信息-->
+    <select id="selectById" resultType="user" parameterType="INT">
+        select  * from role where id = #{id}
+    </select>
+
+</mapper>

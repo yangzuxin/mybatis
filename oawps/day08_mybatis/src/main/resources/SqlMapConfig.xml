@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!--可以在标签内配置数据库信息，也可以通过属性引用外部的数据库配置信息
+            resources属性：用于指定配置文件的位置是按照类路径的写法来写，并且必须存在于类路径下
+            ur属性：要求按照URL的写法来写地址,他是可以唯一标识一个资源的位置：写法
+                    http://localhost:8080/mybatis/demo1/servlet
+                    协议    主机      端口     uri
+                    uri：统一资源标识符他是在应用中唯一定位一个资源的
+        -->
+    <properties resource="JdbcConfig.properties"></properties>
+
+    <!--使用typeAliases配置别名，它只能配置domain中的别名 -->
+    <typeAliases>
+        <!--tpyeAlias用于配置别名，type属性指定的是实体类的全限定类名。alias属性指定别名，当指定了别名就不再区分大小写-->
+        <!--<typeAlias type="com.xiaoan.user.User" alias="user"></typeAlias>-->
+        <!--用于配置别名的包，当指定之后，该包下的类都可以使用别名，并且类名就是别名，不再区分大小写，适用于很多类都要配置别名的时候-->
+        <package name="com.xiaoan.user"></package>
+    </typeAliases>
+    <!--配置环境-->
+    <environments default="mysql">
+        <!--配置MySQL的环境-->
+        <environment id="mysql">
+            <!--配置事务-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--配置连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--配置映射文件的位置-->
+    <mappers>
+        <!--<mapper resource="com/user/UserDao.xml"></mapper>-->
+        <!--用于指定dao接口所在的包，当指定完成之后就不用再写mapper 以及resource或者class-->
+        <!--注意：配置文件的名称必须和接口的名称一致 包括包名路径：
+                  比如UserDao接口位于com.xiaoan.dao下面，则在resources资源文件中应该也放在com.xiaoan.dao下名称保持一致
+        -->
+        <package name="com.xiaoan.dao"></package>
+    </mappers>
+</configuration>
+

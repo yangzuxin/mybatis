@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoan.dao.UserDao">
+
+    <resultMap id="userMap" type="user">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <result property="address" column="address"></result>
+        <collection property="roles" ofType="role">
+            <id property="roleId" column="rid"></id>
+            <result property="roleName" column="role_name"></result>
+            <result property="roleDesc" column="role_desc"></result>
+        </collection>
+    </resultMap>
+
+    <!--查询所有-->
+    <select id="select" resultMap="userMap">
+        SELECT u.*,r.id as rid,r.role_desc,r.role_name from user u
+           LEFT JOIN role_user ru ON u.id = ru.uid
+           LEFT JOIN `role` r on r.id = ru.rid
+    </select>
+
+    <!--根据用户id查询用户信息-->
+    <select id="selectById" resultType="user" parameterType="INT">
+        select  * from user where id = #{id}
+    </select>
+
+</mapper>
